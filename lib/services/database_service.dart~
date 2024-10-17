@@ -30,7 +30,7 @@ class DatabaseService {
       rating REAL,
       stock INTEGER,
       brand TEXT,
-      image TEXT,
+      images TEXT,
       thumbnail TEXT
       isFavourite INTEGER
 
@@ -58,20 +58,14 @@ class DatabaseService {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('products');
     return List.generate(maps.length, (i) {
-      return ProductModel(
-        id: maps[i]['id'],
-        title: maps[i]['title'],
-        description: maps[i]['description'],
-        category: maps[i]['category'],
-        price: maps[i]['price'],
-        discountPercentage: maps[i]['discountPercentage'],
-        rating: maps[i]['rating'],
-        stock: maps[i]['stock'],
-        brand: maps[i]['brand'],
-        image: maps[i]['image'],
-        thumbnail: maps[i]['thumbnail'],
-        isFavourite: maps[i]['isFavourite'] == 1 ? true : false,
-      );
+      return ProductModel.fromJson(maps[i]);
     });
+  }
+
+  Future<void> deleteAllProducts() async {
+    final db = await database;
+    await db.delete(
+      'products',
+    );
   }
 }

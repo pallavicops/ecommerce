@@ -61,4 +61,11 @@ class DatabaseService {
       return ProductModel.fromJson(maps[i]);
     });
   }
+
+  Future<void> deleteAllProducts() async {
+    final db = await database;
+    await db.delete(
+      'products',
+    );
+  }
 }

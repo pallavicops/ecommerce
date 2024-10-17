@@ -64,7 +64,7 @@ class ProductModel {
       'stock': stock,
       'brand': brand,
 
-      'image': image, // Convert list to comma-separated string
+      'images': image, // Convert list to comma-separated string
       'thumbnail': thumbnail,
       // 'isFavourite': isFavourite ? 1 : 0, // Convert bool to integer
     };
