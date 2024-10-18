@@ -190,9 +190,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                         children: [
                                           IconButton(
                                             onPressed: () {
-                                              print(
-                                                  "Product ID: ${product.id}");
-                                              print(product.image);
                                               context
                                                   .read<ProductProvider>()
                                                   .changeFavourite(product.id);

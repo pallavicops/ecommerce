@@ -22,19 +22,16 @@ class ProductProvider with ChangeNotifier {
 
   // Method to fetch products from the local database, or from the API if the database is empty
   Future<void> fetchProducts() async {
-    await databaseService.deleteAllProducts();
     _products = await databaseService.getProducts();
 
     // If no products found in the database, fetch from API
     if (_products.isEmpty) {
-      print("No products found locally, fetching from API...");
       final fetchedProducts = await ProductService().fetchProducts();
 
       // // Insert each fetched product into the local database
       for (var product in fetchedProducts) {
         await databaseService.insertProduct(product);
       }
-      print("Products fetched from API and inserted into local database");
 
       // Update _products with the fetched data
       _products = fetchedProducts;

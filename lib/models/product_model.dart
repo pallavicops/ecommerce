@@ -42,11 +42,7 @@ class ProductModel {
       brand: json['brand'],
 
       // Safely access the first image, handle case when 'image' is null or not a list
-      image: (json['images'] != null &&
-              json['images'] is List &&
-              json['images'].isNotEmpty)
-          ? json['images'][0]
-          : '',
+      image: json['image'],
       thumbnail: json['thumbnail'],
       isFavourite: json['isFavourite'] == 1, // Convert integer back to bool
     );

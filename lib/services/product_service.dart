@@ -14,7 +14,24 @@ class ProductService {
       final data = json.decode(response.body);
 
       return (data['products'] as List)
-          .map((json) => ProductModel.fromJson(json))
+          .map((json) => ProductModel(
+                id: json['id'],
+                title: json['title'],
+                description: json['description'],
+                category: json['category'],
+                price: json['price'],
+                discountPercentage: json['discountPercentage'],
+                rating: json['rating'],
+                stock: json['stock'],
+                brand: json['brand'],
+                image: (json['images'] != null &&
+                        json['images'] is List &&
+                        json['images'].isNotEmpty)
+                    ? json['images'][0]
+                    : '',
+                thumbnail: json['thumbnail'],
+                isFavourite: false,
+              ))
           .toList();
     } else {
       throw Exception('Failed to load products');
