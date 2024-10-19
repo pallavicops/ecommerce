@@ -31,7 +31,11 @@ class DatabaseService {
       stock INTEGER,
       brand TEXT,
       image TEXT,
-      thumbnail TEXT
+      thumbnail TEXT,
+      warrantyInformation TEXT,
+      shippingInformation TEXT,
+      returnPolicy TEXT,
+      minimumOrderQuantity INTEGER,
       isFavourite INTEGER
 
 
@@ -56,6 +60,15 @@ class DatabaseService {
 
   Future<List<ProductModel>> getProducts() async {
     final db = await database;
+    // Check if the products table exists
+    final tableExists = await db.rawQuery('''
+      SELECT name FROM sqlite_master WHERE type='table' AND name='products';
+    ''');
+
+    // If the products table does not exist, create it
+    if (tableExists.isEmpty) {
+      await _createDB(db, 1); // Recreate the products table
+    }
     final List<Map<String, dynamic>> maps = await db.query('products');
     return List.generate(maps.length, (i) {
       return ProductModel.fromJson(maps[i]);
@@ -66,6 +79,13 @@ class DatabaseService {
     final db = await database;
     await db.delete(
       'products',
+    );
+  }
+
+  Future<void> deleteProductsTable() async {
+    final db = await database;
+    await db.execute(
+      'DROP TABLE IF EXISTS products',
     );
   }
 }
