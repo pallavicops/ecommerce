@@ -43,8 +43,7 @@ class _ProductdetailscreenState extends State<ProductDetailScreen> {
             children: [
               Hero(
                 tag: widget.product.id,
-                child: PageStorage(
-                  bucket: PageStorageBucket(),
+                child: widget(
                   child: CarouselSlider(
                     items: widget.product.image.split(",").map((_element) {
                       return Container(

@@ -61,7 +61,8 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
                                 const BorderRadius.all(Radius.circular(10)),
                             color: Colors.white,
                             image: DecorationImage(
-                              image: NetworkImage(favourite.image),
+                              image:
+                                  NetworkImage(favourite.image.split(",")[0]),
                               fit: BoxFit.cover,
                             ),
                           ),

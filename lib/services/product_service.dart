@@ -27,7 +27,7 @@ class ProductService {
                 image: (json['images'] != null &&
                         json['images'] is List &&
                         json['images'].isNotEmpty)
-                    ? json['images'][0]
+                    ? json['images'].join(',')
                     : '',
                 thumbnail: json['thumbnail'],
                 isFavourite: false,

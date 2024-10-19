@@ -132,7 +132,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
               children: [
                 Expanded(
                   child: context.watch<ProductProvider>().isLoading
-                      ? const CircularProgressIndicator()
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                          color: Colors.black,
+                        ))
                       : ListView.builder(
                           itemCount:
                               context.watch<ProductProvider>().products.length,
@@ -179,8 +182,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                           decoration: BoxDecoration(
                                             color: const Color(0xFFF0F5FA),
                                             image: DecorationImage(
-                                              image:
-                                                  NetworkImage(product.image),
+                                              image: NetworkImage(
+                                                  product.image.split(",")[0]),
                                               fit: BoxFit.cover,
                                             ),
                                             borderRadius:

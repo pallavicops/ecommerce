@@ -23,6 +23,7 @@ class ProductProvider with ChangeNotifier {
   // Method to fetch products from the local database, or from the API if the database is empty
   Future<void> fetchProducts() async {
     isLoading = true;
+    await databaseService.deleteAllProducts();
     _products = await databaseService.getProducts();
 
     // If no products found in the database, fetch from API

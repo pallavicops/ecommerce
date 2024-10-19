@@ -27,12 +27,12 @@ class ProductService {
                 image: (json['images'] != null &&
                         json['images'] is List &&
                         json['images'].isNotEmpty)
-                    ? json['images'][0]
+                    ? json['images'] as String
                     : '',
                 thumbnail: json['thumbnail'],
                 isFavourite: false,
-                warrantyInformation: json['warranty'],
-                shippingInformation: json['shipping'],
+                warrantyInformation: json['warrantyInformation'],
+                shippingInformation: json['shippingInformation'],
                 returnPolicy: json['returnPolicy'],
                 minimumOrderQuantity: json['minimumOrderQuantity'],
               ))
