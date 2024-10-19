@@ -3,8 +3,10 @@ import 'package:ecommerce/screens/productsScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../models/product_model.dart';
+import '../providers/product_provider.dart';
 import '../services/product_service.dart';
 import 'exploreScreen.dart';
 import 'favouritesScreen.dart';
@@ -25,6 +27,14 @@ class _HomeScreenState extends State<HomeScreen> {
     const FavouritesScreen(),
     const OrdersScreen(),
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<ProductProvider>(context, listen: false).fetchProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -49,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           child: BottomNavigationBar(
+            elevation: 0,
             backgroundColor: Colors.transparent,
             type: BottomNavigationBarType.fixed,
             onTap: (index) {

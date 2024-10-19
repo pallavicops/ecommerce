@@ -14,14 +14,6 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  final ProductService productService = ProductService();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Provider.of<ProductProvider>(context, listen: false).fetchProducts();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,103 +131,115 @@ class _ProductsScreenState extends State<ProductsScreen> {
             child: Column(
               children: [
                 Expanded(
-                  child: ListView.builder(
-                      itemCount:
-                          context.watch<ProductProvider>().products.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        final product =
-                            context.watch<ProductProvider>().products[index];
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProductDetailScreen(
-                                          product: product,
-                                        )));
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.all(5),
-                            height: 200,
-                            width: 200,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                  ),
-                                ]),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 200,
-                                    width: 200,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFF0F5FA),
-                                      image: DecorationImage(
-                                        image: NetworkImage(product.image),
-                                        fit: BoxFit.cover,
+                  child: context.watch<ProductProvider>().isLoading
+                      ? const CircularProgressIndicator()
+                      : ListView.builder(
+                          itemCount:
+                              context.watch<ProductProvider>().products.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final product = context
+                                .watch<ProductProvider>()
+                                .products[index];
+                            return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ProductDetailScreen(
+                                              product: product,
+                                            )));
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.all(5),
+                                height: 200,
+                                width: 200,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 2,
+                                        blurRadius: 5,
                                       ),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          IconButton(
-                                            onPressed: () {
-                                              context
-                                                  .read<ProductProvider>()
-                                                  .changeFavourite(product.id);
-                                            },
-                                            icon: Icon(
-                                              product.isFavourite
-                                                  ? Icons.favorite
-                                                  : Icons.favorite_outline,
-                                              color: Colors.grey,
+                                    ]),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Hero(
+                                        tag: product.id,
+                                        child: Container(
+                                          height: 200,
+                                          width: 200,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFFF0F5FA),
+                                            image: DecorationImage(
+                                              image:
+                                                  NetworkImage(product.image),
+                                              fit: BoxFit.cover,
                                             ),
+                                            borderRadius:
+                                                BorderRadius.circular(20),
                                           ),
-                                        ]),
+                                          child: Stack(
+                                              alignment: Alignment.topRight,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {
+                                                    context
+                                                        .read<ProductProvider>()
+                                                        .changeFavourite(
+                                                            product.id);
+                                                  },
+                                                  icon: Icon(
+                                                    product.isFavourite
+                                                        ? Icons.favorite
+                                                        : Icons
+                                                            .favorite_outline,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        "\$${product.price.toString()}",
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        product.title,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      Text(
+                                        product.category,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    "\$${product.price.toString()}",
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    product.title,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  Text(
-                                    product.category,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      }),
+                            );
+                          }),
                 )
               ],
             ),

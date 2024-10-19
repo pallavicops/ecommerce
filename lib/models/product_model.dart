@@ -12,6 +12,11 @@ class ProductModel {
 
   final String image;
   final String thumbnail;
+  final String warrantyInformation;
+  final String shippingInformation;
+  final String returnPolicy;
+  final int minimumOrderQuantity;
+
   final bool isFavourite;
 
   ProductModel({
@@ -26,6 +31,10 @@ class ProductModel {
     required this.brand,
     required this.image,
     required this.thumbnail,
+    required this.warrantyInformation,
+    required this.shippingInformation,
+    required this.returnPolicy,
+    required this.minimumOrderQuantity,
     required this.isFavourite,
   });
 
@@ -44,6 +53,11 @@ class ProductModel {
       // Safely access the first image, handle case when 'image' is null or not a list
       image: json['image'],
       thumbnail: json['thumbnail'],
+
+      warrantyInformation: json['warrantyInformation'],
+      shippingInformation: json['shippingInformation'],
+      returnPolicy: json['returnPolicy'],
+      minimumOrderQuantity: json['minimumOrderQuantity'],
       isFavourite: json['isFavourite'] == 1, // Convert integer back to bool
     );
   }
@@ -62,6 +76,11 @@ class ProductModel {
 
       'image': image, // Convert list to comma-separated string
       'thumbnail': thumbnail,
+
+      'warrantyInformation': warrantyInformation,
+      'shippingInformation': shippingInformation,
+      'returnPolicy': returnPolicy,
+      'minimumOrderQuantity': minimumOrderQuantity,
       // 'isFavourite': isFavourite ? 1 : 0, // Convert bool to integer
     };
   }
@@ -93,6 +112,10 @@ class ProductModel {
       brand: brand ?? this.brand,
       image: image ?? this.image,
       thumbnail: thumbnail ?? this.thumbnail,
+      warrantyInformation: warrantyInformation ?? this.warrantyInformation,
+      shippingInformation: shippingInformation ?? this.shippingInformation,
+      returnPolicy: returnPolicy ?? this.returnPolicy,
+      minimumOrderQuantity: minimumOrderQuantity ?? this.minimumOrderQuantity,
       isFavourite: isFavourite ?? this.isFavourite,
     );
   }

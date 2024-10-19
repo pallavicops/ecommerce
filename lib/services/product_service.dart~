@@ -31,8 +31,8 @@ class ProductService {
                     : '',
                 thumbnail: json['thumbnail'],
                 isFavourite: false,
-                warrantyInformation: json['warrantyInformation'],
-                shippingInformation: json['shippingInformation'],
+                warrantyInformation: json['warranty'],
+                shippingInformation: json['shipping'],
                 returnPolicy: json['returnPolicy'],
                 minimumOrderQuantity: json['minimumOrderQuantity'],
               ))
