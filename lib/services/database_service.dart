@@ -43,19 +43,26 @@ class DatabaseService {
     ''');
   }
 
+// Alter the table to add a new column
+  void _onUpgrade(Database db, int oldVersion, int newVersion) {
+    if (oldVersion < newVersion) {}
+  }
+
   Future<Database> _initializeDB(String fileName) async {
     String dbpath = await getDatabasesPath();
     final path = join(dbpath, fileName);
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createDB,
+      onUpgrade: _onUpgrade,
     );
   }
 
   Future<void> insertProduct(ProductModel product) async {
     final db = await database;
-    await db.insert('products', product.toJson());
+    await db.insert('products', product.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.ignore);
   }
 
   Future<List<ProductModel>> getProducts() async {
@@ -73,6 +80,19 @@ class DatabaseService {
     return List.generate(maps.length, (i) {
       return ProductModel.fromJson(maps[i]);
     });
+  }
+  //Update favourite status for product using id
+
+  Future<int> updateProduct(ProductModel product) async {
+    final db = await database;
+    int updatedProduct = await db.update(
+      'products',
+      product.toJson(),
+      where: 'id = ?',
+      whereArgs: [product.id],
+    );
+
+    return updatedProduct;
   }
 
   Future<void> deleteAllProducts() async {

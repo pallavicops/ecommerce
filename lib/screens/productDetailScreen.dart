@@ -66,7 +66,7 @@ class _ProductdetailscreenState extends State<ProductDetailScreen> {
                       enlargeCenterPage: true,
                       viewportFraction:
                           0.8, // Adjust the visible portion of the neighboring slides
-                      aspectRatio: 16 / 9,
+
                       initialPage: 0,
                     ),
                   ),
