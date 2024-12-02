@@ -9,7 +9,7 @@ import '../services/product_service.dart';
 class ProductProvider with ChangeNotifier {
   // Private list of products
   List<ProductModel> _products = [];
-
+  bool isLoading = false;
   // Getter for the list of products
   List<ProductModel> get products => _products;
 
@@ -22,27 +22,31 @@ class ProductProvider with ChangeNotifier {
 
   // Method to fetch products from the local database, or from the API if the database is empty
   Future<void> fetchProducts() async {
+    isLoading = true;
+
+    _products = await databaseService.getProducts();
+    notifyListeners();
+    // If no products found in the database, fetch from API
+
+    final fetchedProducts = await ProductService().fetchProducts();
+
+    // // Insert each fetched product into the local database
+    for (var product in fetchedProducts) {
+      await databaseService.insertProduct(product);
+    }
+
+    // fetch the updated list of products from database
+
     _products = await databaseService.getProducts();
 
-    // If no products found in the database, fetch from API
-    if (_products.isEmpty) {
-      final fetchedProducts = await ProductService().fetchProducts();
-
-      // // Insert each fetched product into the local database
-      for (var product in fetchedProducts) {
-        await databaseService.insertProduct(product);
-      }
-
-      // Update _products with the fetched data
-      _products = fetchedProducts;
-    }
+    isLoading = false;
 
     // Notify listeners to update the UI
     notifyListeners();
   }
 
   // Method to toggle the favourite status of a product
-  void changeFavourite(int id) {
+  Future<void> changeFavourite(int id) async {
     final index = _products.indexWhere((product) => product.id == id);
 
     if (index != -1) {
@@ -53,6 +57,10 @@ class ProductProvider with ChangeNotifier {
 
       // Update the product in the _products list
       _products[index] = updatedProduct;
+
+      // Update the database with the updated product
+      int updated = await databaseService.updateProduct(updatedProduct);
+      print("Updated product: ${updatedProduct.toJson()}");
 
       // Notify listeners to refresh the UI
       notifyListeners();

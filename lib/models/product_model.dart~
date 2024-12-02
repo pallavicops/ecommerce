@@ -81,7 +81,7 @@ class ProductModel {
       'shippingInformation': shippingInformation,
       'returnPolicy': returnPolicy,
       'minimumOrderQuantity': minimumOrderQuantity,
-      'isFavourite': isFavourite ? 1 : 0, // Convert bool to integer
+      // 'isFavourite': isFavourite ? 1 : 0, // Convert bool to integer
     };
   }
 

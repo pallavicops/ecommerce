@@ -30,8 +30,12 @@ class DatabaseService {
       rating REAL,
       stock INTEGER,
       brand TEXT,
-      images TEXT,
-      thumbnail TEXT
+      image TEXT,
+      thumbnail TEXT,
+      warrantyInformation TEXT,
+      shippingInformation TEXT,
+      returnPolicy TEXT,
+      minimumOrderQuantity INTEGER,
       isFavourite INTEGER
 
 
@@ -39,33 +43,72 @@ class DatabaseService {
     ''');
   }
 
+// Alter the table to add a new column
+  void _onUpgrade(Database db, int oldVersion, int newVersion) {
+    if (oldVersion < newVersion) {
+
+
+      }
+  }
+
   Future<Database> _initializeDB(String fileName) async {
     String dbpath = await getDatabasesPath();
     final path = join(dbpath, fileName);
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createDB,
+      onUpgrade: _onUpgrade,
     );
   }
 
   Future<void> insertProduct(ProductModel product) async {
     final db = await database;
-    await db.insert('products', product.toJson());
+    await db.insert('products', product.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.ignore);
   }
 
   Future<List<ProductModel>> getProducts() async {
     final db = await database;
+    // Check if the products table exists
+    final tableExists = await db.rawQuery('''
+      SELECT name FROM sqlite_master WHERE type='table' AND name='products';
+    ''');
+
+    // If the products table does not exist, create it
+    if (tableExists.isEmpty) {
+      await _createDB(db, 1); // Recreate the products table
+    }
     final List<Map<String, dynamic>> maps = await db.query('products');
     return List.generate(maps.length, (i) {
       return ProductModel.fromJson(maps[i]);
     });
+  }
+  //Update favourite status for product using id
+
+  Future<int> updateProduct(ProductModel product) async {
+    final db = await database;
+    int updatedProduct = await db.update(
+      'products',
+      product.toJson(),
+      where: 'id = ?',
+      whereArgs: [product.id],
+    );
+
+    return updatedProduct;
   }
 
   Future<void> deleteAllProducts() async {
     final db = await database;
     await db.delete(
       'products',
+    );
+  }
+
+  Future<void> deleteProductsTable() async {
+    final db = await database;
+    await db.execute(
+      'DROP TABLE IF EXISTS products',
     );
   }
 }
